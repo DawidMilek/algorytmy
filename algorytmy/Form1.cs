@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
+using System.Diagnostics;
 using System.Drawing;
 using System.Linq;
 using System.Text;
@@ -12,229 +13,149 @@ namespace algorytmy
 {
     public partial class Form1 : Form
     {
-        private int[] array;
+        CiagLiczb ciag;
+        bool wybranyTypCiagu = false;
 
         public Form1()
         {
             InitializeComponent();
+            ciag = new CiagLiczb();
         }
 
-        public void BubbleSort(int[] array)
-        {
-            for (int i = 0; i < array.Length; i++)
-            {
-                for (int j = i + 1; j < array.Length; j++)
-                {
-                    if (array[i] > array[j])
-                    {
-                        int tmp = array[i];
-                        array[i] = array[j];
-                        array[j] = tmp;
-                    }
-                }
-            }
-        }
-
-        public void Przez_Wybor(int[] array)
-        {
-            int n = array.Length;
-
-            for (int i = 0; i < n - 1; i++)
-            {
-                int index_min = i;
-                for (int j = i + 1; j < n; j++)
-                {
-                    if (array[j] < array[index_min])
-                    {
-                        index_min = j;
-                    }
-                }
-
-                int tmp = array[index_min];
-                array[index_min] = array[i];
-                array[i] = tmp;
-            }
-        }
-
-        public void Przez_Wstawianie(int[] array)
-        {
-            for (int i = 0; i < array.Length; i++)
-            {
-                int obecny = array[i];
-                int j = i - 1;
-
-                while (j >= 0 && array[j] > obecny)
-                {
-                    array[j + 1] = array[j];
-                    j = j - 1;
-                }
-
-                array[j + 1] = obecny;
-            }
-        }
-
-        public void Szybkie(int[] array, int lewy, int prawy)
-        {
-            var i = lewy;
-            var j = prawy;
-            var srodek = array[(lewy+prawy)/2];
-
-            while (i <= j)
-            {
-                while (array[i] < srodek)
-                { i++; }
-                while (array[j] > srodek)
-                { j--; }
-
-                if (i <= j)
-                {
-                    int tmp = array[i];
-                    array[i] = array[j];
-                    array[j] = tmp;
-                    i++;
-                    j--;
-                }
-            }
-
-            if (lewy < j)
-            { Szybkie(array, lewy, j); }
-
-            if (i < prawy)
-            { Szybkie(array, i, prawy); }
-        }
-        /*nie działa
-        public void scalenie(int poczatek, int koniec)
-        {
-            int []tmp_array = new int[this.array.Length];
-            for(int i = poczatek; i <= koniec; i++)
-            {
-                tmp_array[i] = this.array[i]; //kopia
-            }
-
-            int p = poczatek;
-            int q = (poczatek+koniec)/2+1;
-            int r = poczatek;
-            while(p <= (poczatek+koniec)/2 && q <= koniec)
-            {
-                if (tmp_array[p] < tmp_array[q])
-                {
-                    this.array[r] = tmp_array[p];
-                    r++;
-                    p++;
-                }
-                else
-                {
-                    this.array[r] = tmp_array[q];
-                    r++;
-                    q++;
-                }
-            }
-
-            while(p <= (poczatek+koniec)/2)
-            {
-                this.array[r] = tmp_array[p];
-                r++;
-                p++;
-            }
-        }
-
-        public void Przez_Scalenie(int poczatek, int koniec)
-        {
-            if(poczatek <  koniec)
-            {
-                Przez_Scalenie(poczatek, (poczatek + koniec) / 2);
-                Przez_Scalenie((poczatek + koniec) / 2 + 1, koniec);
-                scalenie(poczatek,koniec);
-            }
-        }
-        */
         private void D_generuj_Click(object sender, EventArgs e)
         {
-            array = new int[15];
-            Random rnd = new Random();
-
-            for (int i = 0; i < array.Length; i++)
+            if (!wybranyTypCiagu)
             {
-                this.array[i] = rnd.Next(100);
-                D_liczby_wygenerowane.Items.Add(this.array[i]);
+                MessageBox.Show("Wybierz typ ciągu!");
+                return;
+            }
+
+            if (D_Typy_Ciagow_Box.Text == "Rosnący")
+            {
+                ciag.generuj_rosnacy_ciag(Convert.ToInt32(D_Rozmiar_Ciagu.Value));
+            }
+
+            if (D_Typy_Ciagow_Box.Text == "Malejący")
+            {
+                ciag.generuj_malejacy_ciag(Convert.ToInt32(D_Rozmiar_Ciagu.Value));
+            }
+
+            if (D_Typy_Ciagow_Box.Text == "Losowy")
+            {
+                ciag.generuj_losowy_ciag(Convert.ToInt32(D_Rozmiar_Ciagu.Value));
+            }
+
+            D_liczby_wygenerowane.Items.Clear();
+            ciag.wstaw_ciag_do_listy(D_liczby_wygenerowane);
+        }
+
+        private void D_sortuj_Click(object sender, EventArgs e)
+        {
+            if (
+                !D_babelkowe.Checked
+             && !D_Przez_wstawienie.Checked
+             && !D_Przez_wybor.Checked
+             && !D_szybkie.Checked
+             && !D_Przez_scalenie.Checked
+              )
+            {
+                MessageBox.Show("Wybierz algorytm!");
+                return;
+            }
+
+            if (!ciag.wygenerowane)
+            {
+                MessageBox.Show("Wygeneruj ciąg!");
+                return;
+            }
+
+            AlgorytmySortowania algorytm = new AlgorytmySortowania();
+            Stopwatch stoper = new Stopwatch();
+            int[] arr;
+
+            if (D_babelkowe.Checked)
+            {
+                arr = ciag.Arr;
+                stoper.Start();
+                algorytm.bubble_sort(arr);
+                stoper.Stop();
+                dodaj_do_wykresu("bąbelkowe", stoper.ElapsedMilliseconds);
+                dodaj_do_listy(arr, D_liczby_posortowane);
+                stoper.Restart();
+            }
+
+            if (D_Przez_wstawienie.Checked)
+            {
+                arr = ciag.Arr;
+                stoper.Start();
+                algorytm.insertion_sort(arr);
+                stoper.Stop();
+                dodaj_do_wykresu("przez wstawienie", stoper.ElapsedMilliseconds);
+                dodaj_do_listy(arr, D_liczby_posortowane);
+                stoper.Restart();
+            }
+
+            if (D_Przez_wybor.Checked)
+            {
+                arr = ciag.Arr;
+                stoper.Start();
+                algorytm.selection_sort(arr);
+                stoper.Stop();
+                dodaj_do_wykresu("przez wybór", stoper.ElapsedMilliseconds);
+                dodaj_do_listy(arr, D_liczby_posortowane);
+                stoper.Restart();
+            }
+
+            if (D_szybkie.Checked)
+            {
+                arr = ciag.Arr;
+                stoper.Start();
+                algorytm.quick_sort(arr, 0, arr.Length - 1);
+                stoper.Stop();
+                dodaj_do_wykresu("szybkie", stoper.ElapsedMilliseconds);
+                dodaj_do_listy(arr, D_liczby_posortowane);
+                stoper.Restart();
+            }
+
+            if (D_Przez_scalenie.Checked)
+            {
+                arr = ciag.Arr;
+                stoper.Start();
+                algorytm.merge_sort(arr);
+                stoper.Stop();
+                dodaj_do_wykresu("przez scalenie", stoper.ElapsedMilliseconds);
+                dodaj_do_listy(arr, D_liczby_posortowane);
+                stoper.Restart();
             }
         }
 
-        private void D_algorytmy_sortowania_grupbox_Enter(object sender, EventArgs e)
+        private void dodaj_do_wykresu(string tekst, double wynik)
         {
-
+            D_wykres.Series["Czas"].Points.AddXY(tekst, wynik);
         }
 
-        private void D_bombelkowe_CheckedChanged(object sender, EventArgs e)
+        private void dodaj_do_listy(int[] arr, ListBox listbox)
         {
-
+            listbox.Items.Clear();
+            foreach (int i in arr)
+            {
+                listbox.Items.Add(i);
+            }
         }
 
-        private void D_Przez_wybor_CheckedChanged(object sender, EventArgs e)
+        private void D_Typy_Ciagow_Box_SelectedIndexChanged(object sender, EventArgs e)
         {
-
-        }
-
-        private void D_Przez_wstawienie_CheckedChanged(object sender, EventArgs e)
-        {
-
-        }
-
-        private void D_szybkie_CheckedChanged(object sender, EventArgs e)
-        {
-
-        }
-
-        private void D_Przez_scalenie_CheckedChanged(object sender, EventArgs e)
-        {
-
-        }
-
-        private void D_liczby_wygenerowane_SelectedIndexChanged(object sender, EventArgs e)
-        {
-            D_liczby_wygenerowane.Items.Clear();
-        }
-
-        private void D_liczby_posortowane_SelectedIndexChanged(object sender, EventArgs e)
-        {
-            D_liczby_posortowane.Items.Clear();
+            wybranyTypCiagu = true;
         }
 
         private void D_wykres_Click(object sender, EventArgs e)
         {
 
         }
-        private void D_sortuj_Click(object sender, EventArgs e)
+
+        private void D_liczby_wygenerowane_SelectedIndexChanged(object sender, EventArgs e)
         {
-            if (D_bombelkowe.Checked)
-            {
-                BubbleSort(this.array);
-            }
-            else if (D_Przez_wstawienie.Checked)
-            {
-                Przez_Wstawianie(this.array);
-            }
-            else if (D_Przez_wybor.Checked)
-            {
-                Przez_Wybor(this.array);
-            }
-            else if (D_szybkie.Checked)
-            {
-                Szybkie(this.array, 0, this.array.Length - 1);
-            }
-            else if(D_Przez_scalenie.Checked)
-            {
-                //Przez_Scalenie(0, this.array.Length);
-            }
 
-            D_liczby_posortowane.Items.Clear();
-
-
-            for (int i = 0; i < this.array.Length; i++)
-            {
-                D_liczby_posortowane.Items.Add(this.array[i]);
-            }
         }
-
     }
 }
