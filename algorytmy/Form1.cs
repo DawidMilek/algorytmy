@@ -152,10 +152,5 @@ namespace algorytmy
         {
 
         }
-
-        private void D_liczby_wygenerowane_SelectedIndexChanged(object sender, EventArgs e)
-        {
-
-        }
     }
 }

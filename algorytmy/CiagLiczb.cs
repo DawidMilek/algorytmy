@@ -36,6 +36,7 @@ namespace algorytmy
                 arr[i] = x - i;
             }
 
+            wygenerowane = true;
         }
 
         public void generuj_losowy_ciag(int x)

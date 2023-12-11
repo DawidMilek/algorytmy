@@ -85,7 +85,6 @@
             this.D_liczby_wygenerowane.Name = "D_liczby_wygenerowane";
             this.D_liczby_wygenerowane.Size = new System.Drawing.Size(80, 303);
             this.D_liczby_wygenerowane.TabIndex = 3;
-            this.D_liczby_wygenerowane.SelectedIndexChanged += new System.EventHandler(this.D_liczby_wygenerowane_SelectedIndexChanged);
             // 
             // D_generuj
             // 
