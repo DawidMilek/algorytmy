@@ -80,7 +80,7 @@ namespace algorytmy
                 algorytm.bubble_sort(arr);
                 stoper.Stop();
                 dodaj_do_wykresu("bąbelkowe", stoper.ElapsedMilliseconds);
-                dodaj_do_listy(arr, D_liczby_posortowane);
+                dodaj_do_listy("bąbelkowe", stoper);
                 stoper.Restart();
             }
 
@@ -91,7 +91,7 @@ namespace algorytmy
                 algorytm.insertion_sort(arr);
                 stoper.Stop();
                 dodaj_do_wykresu("przez wstawienie", stoper.ElapsedMilliseconds);
-                dodaj_do_listy(arr, D_liczby_posortowane);
+                dodaj_do_listy("przez wstawienie", stoper);
                 stoper.Restart();
             }
 
@@ -102,7 +102,7 @@ namespace algorytmy
                 algorytm.selection_sort(arr);
                 stoper.Stop();
                 dodaj_do_wykresu("przez wybór", stoper.ElapsedMilliseconds);
-                dodaj_do_listy(arr, D_liczby_posortowane);
+                dodaj_do_listy("przez wybór",stoper);
                 stoper.Restart();
             }
 
@@ -113,7 +113,7 @@ namespace algorytmy
                 algorytm.quick_sort(arr, 0, arr.Length - 1);
                 stoper.Stop();
                 dodaj_do_wykresu("szybkie", stoper.ElapsedMilliseconds);
-                dodaj_do_listy(arr, D_liczby_posortowane);
+                dodaj_do_listy("szybkie", stoper);
                 stoper.Restart();
             }
 
@@ -124,7 +124,7 @@ namespace algorytmy
                 algorytm.merge_sort(arr);
                 stoper.Stop();
                 dodaj_do_wykresu("przez scalenie", stoper.ElapsedMilliseconds);
-                dodaj_do_listy(arr, D_liczby_posortowane);
+                dodaj_do_listy("przez scalenie", stoper);
                 stoper.Restart();
             }
         }
@@ -134,13 +134,9 @@ namespace algorytmy
             D_wykres.Series["Czas"].Points.AddXY(tekst, wynik);
         }
 
-        private void dodaj_do_listy(int[] arr, ListBox listbox)
+        private void dodaj_do_listy(string text, Stopwatch stoper)
         {
-            listbox.Items.Clear();
-            foreach (int i in arr)
-            {
-                listbox.Items.Add(i);
-            }
+            D_czas_algorytmow.Items.Add($"{text}: {stoper.ElapsedMilliseconds} ms");
         }
 
         private void D_Typy_Ciagow_Box_SelectedIndexChanged(object sender, EventArgs e)
@@ -148,9 +144,5 @@ namespace algorytmy
             wybranyTypCiagu = true;
         }
 
-        private void D_wykres_Click(object sender, EventArgs e)
-        {
-
-        }
     }
 }
