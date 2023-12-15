@@ -28,9 +28,9 @@
         /// </summary>
         private void InitializeComponent()
         {
-            System.Windows.Forms.DataVisualization.Charting.ChartArea chartArea3 = new System.Windows.Forms.DataVisualization.Charting.ChartArea();
-            System.Windows.Forms.DataVisualization.Charting.Legend legend3 = new System.Windows.Forms.DataVisualization.Charting.Legend();
-            System.Windows.Forms.DataVisualization.Charting.Series series3 = new System.Windows.Forms.DataVisualization.Charting.Series();
+            System.Windows.Forms.DataVisualization.Charting.ChartArea chartArea4 = new System.Windows.Forms.DataVisualization.Charting.ChartArea();
+            System.Windows.Forms.DataVisualization.Charting.Legend legend4 = new System.Windows.Forms.DataVisualization.Charting.Legend();
+            System.Windows.Forms.DataVisualization.Charting.Series series4 = new System.Windows.Forms.DataVisualization.Charting.Series();
             this.D_wykres = new System.Windows.Forms.DataVisualization.Charting.Chart();
             this.D_czas_algorytmow = new System.Windows.Forms.ListBox();
             this.D_liczby_wygenerowane = new System.Windows.Forms.ListBox();
@@ -53,16 +53,16 @@
             // 
             // D_wykres
             // 
-            chartArea3.Name = "ChartArea1";
-            this.D_wykres.ChartAreas.Add(chartArea3);
-            legend3.Name = "Legend1";
-            this.D_wykres.Legends.Add(legend3);
+            chartArea4.Name = "ChartArea1";
+            this.D_wykres.ChartAreas.Add(chartArea4);
+            legend4.Name = "Legend1";
+            this.D_wykres.Legends.Add(legend4);
             this.D_wykres.Location = new System.Drawing.Point(411, 34);
             this.D_wykres.Name = "D_wykres";
-            series3.ChartArea = "ChartArea1";
-            series3.Legend = "Legend1";
-            series3.Name = "Czas";
-            this.D_wykres.Series.Add(series3);
+            series4.ChartArea = "ChartArea1";
+            series4.Legend = "Legend1";
+            series4.Name = "Czas";
+            this.D_wykres.Series.Add(series4);
             this.D_wykres.Size = new System.Drawing.Size(356, 304);
             this.D_wykres.TabIndex = 0;
             this.D_wykres.Text = "chart1";
@@ -196,7 +196,7 @@
             // 
             this.D_Rozmiar_Ciagu.Location = new System.Drawing.Point(6, 46);
             this.D_Rozmiar_Ciagu.Maximum = new decimal(new int[] {
-            9999,
+            100000,
             0,
             0,
             0});

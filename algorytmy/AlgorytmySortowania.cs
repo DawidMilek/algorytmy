@@ -8,6 +8,7 @@ namespace algorytmy
 {
     internal class AlgorytmySortowania
     {
+        private Random _random = new Random();
         public void bubble_sort(int[] arr)
         {
             for (int i = 0; i < arr.Length; i++)
@@ -61,39 +62,48 @@ namespace algorytmy
             }
         }
 
-        public void quick_sort(int[] arr, int start, int end)
+        public void quick_sort(int[] arr, int left, int right)
         {
-            if(start >= end) return;
-
-            int pivot = partition(arr, start, end);
-            quick_sort(arr, start, pivot - 1);
-            quick_sort(arr, pivot + 1, end);
+            if (left < right)
+            {
+                int pi = RandomPartition(arr, left, right);
+                quick_sort(arr, left, pi - 1);
+                quick_sort(arr, pi + 1, right);
+            }
         }
 
-        private int partition(int[] arr, int start, int end)
+        private int RandomPartition(int[] arr, int left, int right)
         {
-            int pivot = end;
-            int j = start - 1;
+            int randomIndex = _random.Next(left, right + 1);
+            Swap(arr, randomIndex, right);
+            return Partition(arr, left, right);
+        }
 
-            for (int i = start; i <= end - 1; i++)
+        private int Partition(int[] arr, int left, int right)
+        {
+            int pivot = arr[right];
+            int i = left - 1;
+
+            for (int j = left; j < right; j++)
             {
-                if (arr[i] < arr[pivot])
+                if (arr[j] < pivot)
                 {
-                    j++;
-                    int tmp = arr[i];
-                    arr[i] = arr[j];
-                    arr[j] = tmp;
+                    i++;
+                    Swap(arr, i, j);
                 }
             }
-
-            j++;
-            int tmp2 = arr[pivot];
-            arr[pivot] = arr[j];
-            arr[j] = tmp2;
-            return j;
+            Swap(arr, i + 1, right);
+            return i + 1;
         }
 
-        public void merge_sort(int[] arr)
+        private void Swap(int[] arr, int i, int j)
+        {
+            int temp = arr[i];
+            arr[i] = arr[j];
+            arr[j] = temp;
+        }
+
+    public void merge_sort(int[] arr)
         {
             if (arr.Length == 1) return;
 

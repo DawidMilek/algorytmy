@@ -45,7 +45,7 @@ namespace algorytmy
             Random r = new Random();
             for (int i = 0; i < x; i++)
             {
-                arr[i] = r.Next(0, 9999);
+                arr[i] = r.Next(0, 100000);
             }
 
             wygenerowane = true;
